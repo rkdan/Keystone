@@ -23,6 +23,7 @@ def process_data(file_path):
     X = Y.copy()
     X[X>0] = 1
     Y = Y/Y.sum(axis=1).reshape(-1,1)
+    X = X/X.sum(axis=1).reshape(-1,1)
     
     Y = Y.astype(np.float32)
     X = X.astype(np.float32)
@@ -34,23 +35,19 @@ def get_data_loaders(file_path, batch_size, test_size):
     X, Y = process_data(file_path)
 
     if test_size > 0.0:
-        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=test_size)
-        X_train, X_val, Y_train, Y_val = train_test_split(X_train, Y_train, test_size=test_size)
+        X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=test_size)
 
         train_dataset = SampleDataset(X_train, Y_train)
         val_dataset = SampleDataset(X_val, Y_val)
-        test_dataset = SampleDataset(X_test, Y_test)
 
         train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
         val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=True)
-        test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
     
     else:
         train_dataset = SampleDataset(X, Y)
         train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
         val_loader = None
-        test_loader = None
 
     num_features = X.shape[1]
 
-    return train_loader, val_loader, test_loader, num_features
+    return train_loader, val_loader, num_features

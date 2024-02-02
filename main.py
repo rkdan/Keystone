@@ -52,7 +52,7 @@ def train_epoch(net, train_loader, val_loader, loss_fn, optimizer, device):
 
 def train(params):
 
-    train_loader, val_loader, test_loader, num_features = get_data_loaders(params.file_path, params.batch_size, params.test_size)
+    train_loader, val_loader, num_features = get_data_loaders(params.file_path, params.batch_size, params.val_size)
 
     loss_fn = nn.MSELoss()
 
@@ -66,19 +66,27 @@ def train(params):
     train_losses = []
     val_losses = []
 
+    optimal_loss = 1
     for epoch in range(params.epochs):
         train_loss, val_loss = train_epoch(net, train_loader, val_loader, loss_fn, optimizer, device)
         
         train_losses.append(train_loss)
         val_losses.append(val_loss)
 
+        if val_loss < optimal_loss:
+            optimal_loss = val_loss
+            best_model = net.state_dict()
+
         if epoch % params.verbosity == 0:
             print('Epoch: {} \tTraining Loss: {:.2e} \tValidation Loss: {:.2e}'.format(epoch, train_loss, val_loss))
 
-    # save model and losses
-    torch.save(net.state_dict(), 'simple_net.pt')
+
+    # save best model
+    torch.save(best_model, 'simple_net.pt')
     loss = {'train': train_losses, 'val': val_losses}
     torch.save(loss, 'simple_net_loss.pt')
+
+    return loss, best_model
 
 if __name__ == '__main__':
     training_params = SimpleNamespace(

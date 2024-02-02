@@ -1130,6 +1130,21 @@ opt-einsum = ["opt-einsum (>=3.3)"]
 optree = ["optree (>=0.9.1)"]
 
 [[package]]
+name = "torchdiffeq"
+version = "0.2.3"
+description = "ODE solvers and adjoint sensitivity analysis in PyTorch."
+optional = false
+python-versions = "~=3.6"
+files = [
+    {file = "torchdiffeq-0.2.3-py3-none-any.whl", hash = "sha256:b5b01ec1294a2d8d5f77e567bf17c5de1237c0573cb94deefa88326f0e18c338"},
+    {file = "torchdiffeq-0.2.3.tar.gz", hash = "sha256:fe75f434b9090ac0c27702e02bed21472b0f87035be6581f51edc5d4013ea31a"},
+]
+
+[package.dependencies]
+scipy = ">=1.4.0"
+torch = ">=1.3.0"
+
+[[package]]
 name = "tqdm"
 version = "4.66.1"
 description = "Fast, Extensible Progress Meter"
@@ -1212,4 +1227,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "a7aa4c044e1387af97f23918ce615df026157ff342a897f04553572f4f67bb9e"
+content-hash = "068534d7730326eb8181a33feba5f5322b92b85f62c2f2b68d59ba716bcc43df"
