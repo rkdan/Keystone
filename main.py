@@ -54,7 +54,11 @@ def train(params):
 
     train_loader, val_loader, num_features = get_data_loaders(params.file_path, params.batch_size, params.val_size)
 
+    # loss_fn = nn.CrossEntropyLoss()
     loss_fn = nn.MSELoss()
+
+    # kl divergence loss
+    # loss_fn = nn.functional.kl_div()
 
     net = Net(num_features, num_features, layers=params.layers)
     optimizer = torch.optim.Adam(net.parameters(), lr=params.lr)
@@ -62,7 +66,7 @@ def train(params):
     # training loop
     device = get_device()
     net.to(device)
-
+    best_model = net.state_dict()
     train_losses = []
     val_losses = []
 
@@ -86,7 +90,7 @@ def train(params):
     loss = {'train': train_losses, 'val': val_losses}
     torch.save(loss, 'simple_net_loss.pt')
 
-    return loss, best_model
+    return loss, best_model, train_loader, val_loader
 
 if __name__ == '__main__':
     training_params = SimpleNamespace(
