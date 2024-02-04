@@ -12,7 +12,7 @@ class Net(nn.Module):
         # Dynamically add hidden layers
         for i, layer_size in enumerate(layers):
             self.modules_list.append(nn.Linear(prev_layer_size, layer_size))
-            # self.modules_list.append(nn.ReLU())
+            self.modules_list.append(nn.ReLU())
             prev_layer_size = layer_size
 
         self.modules_list.append(nn.Linear(prev_layer_size, output_size))
