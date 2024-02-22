@@ -1,1 +1,3 @@
 The first section of the notebook aims to reproduce the results of the paper "Identifying keystone species in microbial communities using deep learning" by Wang et al, published in Nature Ecology and Evolution. They present a Neural ODE cNODE2 that aims to take a binary vector of whether a species is present in a sample or not and map it to a relative abundance. They validate their model using simulated Lotka-Volterra data.
+
+Here we use a simple neural network, and achieve comparable results. We then apply this network to real world data. The network does not perform well on real data, and the cNODE network is painfully slow.
