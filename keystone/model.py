@@ -12,7 +12,7 @@ class Net(nn.Module):
         # Dynamically add hidden layers
         for i, layer_size in enumerate(layers):
             self.modules_list.append(nn.Linear(prev_layer_size, layer_size))
-            self.modules_list.append(nn.ReLU())
+            self.modules_list.append(nn.Sigmoid())
             prev_layer_size = layer_size
 
         self.modules_list.append(nn.Linear(prev_layer_size, output_size))
@@ -23,8 +23,9 @@ class Net(nn.Module):
         for module in self.modules_list:
             x2 = module(x2)
         # for every value of x that is zero, the corresponding value of x2 is set to zero
+        # x_bin = torch.where(x > 0, torch.ones_like(x), x)
         x2 = torch.mul(x2, x)
-        x2 = nn.Softmax(dim=1)(x2)
+        x2 = nn.LogSoftmax(dim=1)(x2)
         return x2
 
 

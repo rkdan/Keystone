@@ -27,6 +27,7 @@ def train_epoch(net, train_loader, val_loader, loss_fn, optimizer, device):
         Y = Y.to(device)
         optimizer.zero_grad()
         output = net(X)
+        # output = torch.log(output)
         loss = loss_fn(output, Y)
         loss.backward()
         optimizer.step()
@@ -39,6 +40,7 @@ def train_epoch(net, train_loader, val_loader, loss_fn, optimizer, device):
             X = X.to(device)
             Y = Y.to(device)
             output = net(X)
+            # output = torch.log(output)
             loss = loss_fn(output, Y)
             val_loss += loss.item()*X.size(0)
         val_loss = val_loss/len(val_loader.dataset)
@@ -55,16 +57,18 @@ def train(params):
     train_loader, val_loader, num_features = get_data_loaders(params.file_path, params.batch_size, params.val_size)
 
     # loss_fn = nn.CrossEntropyLoss()
-    loss_fn = nn.MSELoss()
+    # loss_fn = nn.MSELoss()
+    # loss_fn = nn.NLLLoss()
+    loss_fn = nn.KLDivLoss(reduction='batchmean')
 
     # kl divergence loss
     # loss_fn = nn.functional.kl_div()
 
     net = Net(num_features, num_features, layers=params.layers)
-    optimizer = torch.optim.Adam(net.parameters(), lr=params.lr)
+    optimizer = torch.optim.SGD(net.parameters(), lr=params.lr)
 
     # training loop
-    device = get_device()
+    device = 'cpu'
     net.to(device)
     best_model = net.state_dict()
     train_losses = []
@@ -86,9 +90,9 @@ def train(params):
 
 
     # save best model
-    torch.save(best_model, 'simple_net.pt')
+    torch.save(best_model, f'models/{params.output_name}_net.pt')
     loss = {'train': train_losses, 'val': val_losses}
-    torch.save(loss, 'simple_net_loss.pt')
+    torch.save(loss, f'loss/{params.output_name}_loss.pt')
 
     return loss, best_model, train_loader, val_loader
 
