@@ -25,7 +25,7 @@ class Net(nn.Module):
         # for every value of x that is zero, the corresponding value of x2 is set to zero
         # x_bin = torch.where(x > 0, torch.ones_like(x), x)
         x2 = torch.mul(x2, x)
-        x2 = nn.LogSoftmax(dim=1)(x2)
+        x2 = nn.Softmax(dim=1)(x2)
         return x2
 
 

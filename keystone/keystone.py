@@ -13,7 +13,7 @@ def calculate_keystone(j, sample, original_abundance, model):
         return 0
 
     with torch.no_grad():
-        new_abundance = torch.exp(model(torch.tensor(sample.reshape(1, -1), dtype=torch.float32))).numpy().flatten()
+        new_abundance = model(torch.tensor(sample.reshape(1, -1), dtype=torch.float32)).numpy().flatten()
 
     new_sample = sample.copy()
 
@@ -23,7 +23,7 @@ def calculate_keystone(j, sample, original_abundance, model):
     null_abundance = new_abundance / new_abundance.sum()
 
     with torch.no_grad():
-        predicted_abundance = torch.exp(model(torch.tensor(new_sample.reshape(1, -1), dtype=torch.float32))).numpy()
+        predicted_abundance = model(torch.tensor(new_sample.reshape(1, -1), dtype=torch.float32)).numpy()
     
     k = distance.braycurtis(null_abundance, predicted_abundance.flatten()) * (1 - p)
 
